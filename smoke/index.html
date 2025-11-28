@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国香烟模拟器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>中国香烟模拟器</h1>
+        
+        <div class="smoke-area">
+            <div id="cigarette-display" class="cigarette-display">
+                <!-- 香烟将在这里显示 -->
+                <div id="cigarette-body" class="cigarette-body">
+                    <div id="cigarette-filter" class="cigarette-filter"></div>
+                    <div id="cigarette-paper" class="cigarette-paper">
+                        <div id="cigarette-brand" class="cigarette-brand"></div>
+                    </div>
+                    <div id="cigarette-burn" class="cigarette-burn"></div>
+                    <div id="cigarette-ash" class="cigarette-ash"></div>
+                </div>
+                <div id="smoke-animation" class="smoke-animation">
+                    <!-- 烟雾动画将在这里显示 -->
+                </div>
+                <div id="cigarette-fire" class="cigarette-fire">
+                    <!-- 烟头火焰将在这里显示 -->
+                </div>
+            </div>
+            <div id="timer-display" class="timer-display">
+                <span id="timer">00:00</span>
+            </div>
+        </div>
+        
+        <div class="cigarette-selection">
+            <h2>选择香烟品牌</h2>
+            <div class="cigarette-grid">
+                <div class="cigarette-item" data-brand="中华" data-burn-time="540">
+                    <div class="cigarette-icon">🚬</div>
+                    <div class="cigarette-name">中华</div>
+                </div>
+                <div class="cigarette-item" data-brand="玉溪" data-burn-time="510">
+                    <div class="cigarette-icon">🚬</div>
+                    <div class="cigarette-name">玉溪</div>
+                </div>
+                <div class="cigarette-item" data-brand="芙蓉王" data-burn-time="480">
+                    <div class="cigarette-icon">🚬</div>
+                    <div class="cigarette-name">芙蓉王</div>
+                </div>
+                <div class="cigarette-item" data-brand="利群" data-burn-time="500">
+                    <div class="cigarette-icon">🚬</div>
+                    <div class="cigarette-name">利群</div>
+                </div>
+                <div class="cigarette-item" data-brand="黄鹤楼" data-burn-time="490">
+                    <div class="cigarette-icon">🚬</div>
+                    <div class="cigarette-name">黄鹤楼</div>
+                </div>
+                <div class="cigarette-item" data-brand="南京" data-burn-time="470">
+                    <div class="cigarette-icon">🚬</div>
+                    <div class="cigarette-name">南京</div>
+                </div>
+                <div class="cigarette-item" data-brand="红塔山" data-burn-time="460">
+                    <div class="cigarette-icon">🚬</div>
+                    <div class="cigarette-name">红塔山</div>
+                </div>
+                <div class="cigarette-item" data-brand="云烟" data-burn-time="485">
+                    <div class="cigarette-icon">🚬</div>
+                    <div class="cigarette-name">云烟</div>
+                </div>
+            </div>
+        </div>
+        
+        <button id="smoke-button" class="smoke-button" disabled>
+            开始抽烟
+        </button>
+        
+        <button id="reset-button" class="reset-button" disabled>
+            重置
+        </button>
+        
+        <div class="health-warning">
+            <p>⚠️ 虚拟吸烟，仅供娱乐。现实中吸烟有害健康！</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
