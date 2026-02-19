@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>华夏寻城 · 锦绣之约</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --ink-color: #1a1a1a; --royal-red: #8b1a1a; }
+        body { font-family: 'Noto Serif SC', serif; background: #f8f4ef; color: var(--ink-color); overflow-x: hidden; }
+        .paper-texture { background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png'); background-color: #f8f4ef; }
+        .ink-blob { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(26,26,26,0.03) 0%, rgba(26,26,26,0) 70%); border-radius: 50%; z-index: -1; filter: blur(50px); transition: all 2s ease; }
+        .fade-in { animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .opt-card { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); border: 1px solid rgba(139, 26, 26, 0.1); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; cursor: pointer; }
+        .opt-card:hover { transform: translateX(15px); background: white; border-left: 6px solid var(--royal-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .vertical-text { writing-mode: vertical-rl; text-orientation: upright; }
+        .seal { border: 2px solid var(--royal-red); color: var(--royal-red); padding: 4px; font-weight: 900; line-height: 1; display: inline-block; transform: rotate(-5deg); }
+        #progress-bar { transition: width 0.5s ease; }
+        .scroll-effect { border-left: 1px solid #e2e2e2; border-right: 1px solid #e2e2e2; background: linear-gradient(90deg, #fdfbf7 0%, #ffffff 50%, #fdfbf7 100%); }
+    </style>
+</head>
+<body class="paper-texture min-h-screen flex items-center justify-center p-6">
+
+    <div id="ink1" class="ink-blob" style="top: -10%; left: -10%;"></div>
+    <div id="ink2" class="ink-blob" style="bottom: -10%; right: -10%;"></div>
+
+    <div id="app" class="max-w-5xl w-full relative">
+        <div id="view-start" class="text-center fade-in">
+            <div class="mb-6 flex justify-center items-center gap-4">
+                <div class="h-[1px] w-12 bg-red-900/30"></div>
+                <span class="text-red-900 tracking-[0.5em] text-sm font-bold">寻城纪</span>
+                <div class="h-[1px] w-12 bg-red-900/30"></div>
+            </div>
+            <h1 class="text-6xl md:text-8xl mb-8 font-black tracking-tighter text-stone-900">华夏寻城全鉴</h1>
+            <p class="max-w-xl mx-auto text-stone-500 mb-16 italic leading-relaxed text-lg">“十二道心性拷问，三十四座城池守候。”</p>
+            <button onclick="startTest()" class="bg-red-900 text-white px-10 py-5 text-xl font-bold tracking-widest hover:bg-red-800 transition-colors shadow-2xl">启扉 · 入梦</button>
+        </div>
+
+        <div id="view-test" class="hidden fade-in">
+            <div class="flex items-center justify-between mb-12">
+                <div id="q-category" class="seal text-xs">家宅</div>
+                <div class="flex-1 mx-8 h-[1px] bg-stone-200 relative">
+                    <div id="progress-bar" class="absolute h-[2px] bg-red-900 w-0 top-[-0.5px]"></div>
+                </div>
+                <div id="progress-num" class="text-xs text-stone-400 italic">01/12</div>
+            </div>
+            <h2 id="q-text" class="text-3xl md:text-5xl mb-16 font-bold leading-[1.3] text-stone-800 h-32"></h2>
+            <div id="options" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+
+        <div id="view-result" class="hidden fade-in">
+            <div id="capture-area" class="bg-white p-8 md:p-16 border-[1px] border-stone-100 shadow-2xl relative overflow-hidden">
+                <div class="flex flex-col md:flex-row justify-between items-stretch gap-12 relative z-10">
+                    <div class="flex-1">
+                        <p class="text-red-900 font-bold tracking-widest mb-4">—— 锦绣归处 ——</p>
+                        <h2 id="r-city" class="text-7xl md:text-9xl font-black text-stone-900 mb-6 tracking-tighter"></h2>
+                        <div class="seal text-xl mb-8">命定之城</div>
+                        <p id="r-tag" class="text-2xl text-stone-800 font-bold mb-8 border-l-4 border-red-900 pl-6 py-2"></p>
+                        <div class="text-stone-500 leading-relaxed text-lg italic bg-stone-50 p-6 border-stone-100 border rounded">
+                            <span class="text-4xl text-red-900/20 leading-none">“</span>
+                            <span id="r-desc"></span>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-48 flex flex-col items-center justify-center scroll-effect p-8 rounded-sm shadow-inner">
+                        <div id="r-poem" class="vertical-text text-2xl md:text-3xl font-bold tracking-[0.3em] text-stone-800 leading-loose"></div>
+                        <div class="mt-8 border-t border-stone-200 pt-4">
+                            <div class="seal text-xs scale-75">华夏鉴</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 flex justify-center gap-6">
+                <button onclick="location.reload()" class="px-8 py-3 border border-stone-300 text-stone-400 hover:text-red-900 transition-all">再续前缘</button>
+                <button onclick="alert('截图保存你的命定之卷')" class="px-8 py-3 bg-stone-900 text-white shadow-xl">保存画卷</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { cat: "家宅", q: "关于父母养老，你心底最真实的打算？", o: [{ t: "承欢膝下：离家近就踏实。", v: "Root" }, { t: "接来团聚：给他们最好的医疗。", v: "Power" }, { t: "旅居康养：去山清水秀的地方。", v: "Nature" }, { t: "各安其位：保持独立空间。", v: "Modern" }]},
+            { cat: "情丝", q: "若你已有对象，你们对未来的共识是？", o: [{ t: "并肩作战：共同打拼事业。", v: "Power" }, { t: "岁月静好：浪漫的小城生活。", v: "Elegant" }, { t: "平淡生活：烟火气里成家。", v: "Fire" }, { t: "浪迹天涯：去边疆探索。", v: "Mystery" }]},
+            { cat: "情丝", q: "若你单身，你最期待遇到？", o: [{ t: "势均力敌的职场精英", v: "Modern" }, { t: "满腹经纶的文艺青年", v: "Elegant" }, { t: "单纯质朴的邻家异性", v: "Root" }, { t: "神秘野性的流浪灵魂", v: "Mystery" }]},
+            { cat: "功名", q: "你最向往的职业状态是？", o: [{ t: "掌握资源与决策权。", v: "Power" }, { t: "凭一技之长过日子。", v: "Nature" }, { t: "在体制内稳步升迁。", v: "Root" }, { t: "投身最前沿的领域。", v: "Mystery" }]},
+            { cat: "格物", q: "你会选哪种风格装饰书房？", o: [{ t: "极简科技与智能硬件。", v: "Modern" }, { t: "古董文玩与沉淀。", v: "History" }, { t: "异域图腾与民族饰品。", v: "Mystery" }, { t: "绿植繁花与自然。", v: "Nature" }]},
+            { cat: "五味", q: "饥肠辘辘的深夜，想念哪种味道？", o: [{ t: "火辣解压的红油火锅。", v: "Fire" }, { t: "精致清淡的淮扬菜。", v: "Elegant" }, { t: "扎实的碳水肉面。", v: "Root" }, { t: "豪迈的异域烤肉。", v: "Mystery" }]},
+            { cat: "心境", q: "你如何看待“加班”？", o: [{ t: "钱给够，加班无妨。", v: "Power" }, { t: "生活必须大于工作。", v: "Nature" }, { t: "能接受温和的忙碌。", v: "Elegant" }, { t: "工作生活融为一体。", v: "Modern" }]},
+            { cat: "消遣", q: "一个人的周末，你在哪里？", o: [{ t: "露台酒吧看霓虹。", v: "Modern" }, { t: "古寺禅林听钟声。", v: "History" }, { t: "熙攘早市看烟火。", v: "Fire" }, { t: "深山营地发呆。", v: "Nature" }]},
+            { cat: "天时", q: "你最能忍受哪种极端环境？", o: [{ t: "极致严寒，有暖气。", v: "Snow" }, { t: "潮湿闷热，有空调。", v: "Modern" }, { t: "强紫外线，风景绝美。", v: "Mystery" }, { t: "一成不变的阴雨。", v: "Elegant" }]},
+            { cat: "人脉", q: "你最担心的社交问题是？", o: [{ t: "排外，难入圈子。", v: "History" }, { t: "冷漠，互不相识。", v: "Power" }, { t: "酒桌应酬避无可避。", v: "Root" }, { t: "语言不通难沟通。", v: "Mystery" }]},
+            { cat: "远景", q: "十年后，你在哪里看夕阳？", o: [{ t: "大都市落地窗前。", v: "Power" }, { t: "自家院子里。", v: "Root" }, { t: "山海之间的长椅。", v: "Nature" }, { t: "在前往远方的路。", v: "Mystery" }]},
+            { cat: "宿命", q: "最后一问：相信“命中注定”吗？", o: [{ t: "人定胜天。", v: "Power" }, { t: "随遇而安。", v: "Nature" }, { t: "顺势而为。", v: "Root" }, { t: "心之所向。", v: "Mystery" }]}
+        ];
+
+        const cityDB = [
+            // 34座城池 诗意数据库
+            { n: "北京", t: "帝都风云，万象之首", d: "红墙映雪，古木沉香，你在权力的巅峰亦不忘血脉的温情。", c: "Power", p: "长城带雨横秦塞，故宫映日耀金华。" },
+            { n: "上海", t: "魔都繁华，精致尽头", d: "规则与梦想交织，你在霓虹尽头寻找一份灵魂的体面。", c: "Power", p: "海上繁华梦一场，外滩钟响忆流年。" },
+            { n: "香港", t: "东方明珠，国际视界", d: "多元文明的撞击，成就了你独立且开阔的自由精神。", c: "Modern", p: "维港星辉映画帘，太平山下万家灯。" },
+            { n: "澳门", t: "霓虹之下，宁静港湾", d: "在博弈的喧嚣中，你守着那份葡韵石阶下的从容。", c: "Modern", p: "大三巴前怀旧事，妈阁庙里点青烟。" },
+            { n: "台北", t: "温润宝岛，古早文化", d: "书香与街巷的古早味，温润着你那颗从未走远的心。", c: "Elegant", p: "淡水夕阳红入梦，士林烟火最温情。" },
+            { n: "拉萨", t: "日光之城，信仰终点", d: "洗净铅华，你在离天最近的地方找到了内心的平衡。", c: "Mystery", p: "布宫云影衔经语，雪域清光照法身。" },
+            { n: "成都", t: "锦绣蓉城，快活如神", d: "竹影摇曳，茶香氤氲，生活是一场没有终点的巴适。", c: "Nature", p: "九天开出一成都，万户千门入画图。" },
+            { n: "杭州", t: "人间天堂，灵动互联", d: "山色空蒙雨亦奇，你将文艺的情怀揉进了时代的浪潮。", c: "Elegant", p: "西湖翠柳笼烟雾，苏堤春晓赏湖光。" },
+            { n: "南京", t: "金陵余韵，儒雅文枢", d: "六朝古都的忧郁与坚毅，是你性格中最高级的底色。", c: "History", p: "秦淮水暖香风远，乌衣巷口看斜阳。" },
+            { n: "西安", t: "长安归梦，厚重秦风", d: "钟楼暮色下，你敬畏时间，守着那份千年不改的尊严。", c: "History", p: "长安百花争落日，古墙砖瓦刻沧桑。" },
+            { n: "广州", t: "务实粤韵，包容万物", d: "繁华里透着朴素，你在老火靓汤中品味生活的本真。", c: "Modern", p: "珠江浪卷花城色，骑楼深处是吾家。" },
+            { n: "深圳", t: "鹏城弄潮，不问出身", d: "你是时间的信徒，在这座没有背景的城市创造背景。", c: "Power", p: "鹏飞九万里风云，海拓三千年梦想。" },
+            { n: "重庆", t: "火辣江湖，山城重义", d: "叠嶂灯火，两江沸腾，你的性格里流淌着不羁的侠气。", c: "Fire", p: "洪崖洞下江流转，吊脚楼头火锅香。" },
+            { n: "武汉", t: "九省通衢，江湖气概", d: "极目楚天舒，你性格中的豁达与武汉的江水一样阔大。", c: "Fire", p: "黄鹤楼高怀古韵，长江桥跨写新章。" },
+            { n: "天津", t: "幽默风趣，洋楼文化", d: "看透了世界的严肃，你选择用一份幽默与生活握手言和。", c: "History", p: "五大道上秋风飒，天津之眼看流云。" },
+            { n: "哈尔滨", t: "冰城风情，欧陆余晖", d: "极寒里的火热，你有着北国汉子最硬核的浪漫。", c: "Snow", p: "冰城素裹玲珑雪，索菲亚灯映晚钟。" },
+            { n: "昆明", t: "春城烂漫，四季如花", d: "温暖是你的盔甲，生活在昆明，四季便没有了终点。", c: "Nature", p: "滇池水暖鸥先觉，翠湖春深花自开。" },
+            { n: "福州", t: "有福之州，榕树长青", d: "榕影婆娑，你心底的平静在三坊七巷里找到了寄托。", c: "Nature", p: "闽江浪拍三坊巷，榕影长留有福州。" },
+            { n: "海口", t: "椰风海韵，避世天堂", d: "大海是你的知己，椰树是你逃离喧嚣后的第一道防线。", c: "Nature", p: "椰林摇曳南溟月，海阔帆悬碧水天。" },
+            { n: "长沙", t: "星城火辣，不夜烟火", d: "灵魂要有烈度，长沙的灯火是你给生命最热烈的告白。", c: "Fire", p: "湘江北去橘洲暖，岳麓枫红晚望秋。" },
+            { n: "南宁", t: "半城绿树，悠然自得", d: "生机勃勃的绿意，是你对生活最温柔的向往。", c: "Nature", p: "青秀山前花烂漫，邕江水畔柳如丝。" },
+            { n: "乌鲁木齐", t: "丝路核心，旷野自由", d: "大漠落日，天山雪峰，你的心注定要追随远方的风。", c: "Mystery", p: "天山雪映丝绸路，大漠驼铃响远方。" },
+            { n: "呼和浩特", t: "青城辽阔，风吹草低", d: "蒙古包外的琴声，是你心中那匹野马的故乡。", c: "Mystery", p: "草原无际天垂野，塞北风清马踏云。" },
+            { n: "济南", t: "泉城如画，温润如玉", d: "泉水叮咚，你如济南一般，内心总有一股灵动的生机。", c: "Root", p: "泉源不竭流千载，明湖烟雨映千佛。" },
+            { n: "郑州", t: "中原腹地，四方通达", d: "大地的中心，给予你承载三代同堂的厚重底力。", c: "Root", p: "黄河奔浪中原腹，铁路枢纽万象通。" },
+            { n: "合肥", t: "科技黑马，务实稳健", d: "在进取中保持谦逊，你在代码与科创中编织未来。", c: "Root", p: "天鹅湖畔星光灿，创新高地竞风华。" },
+            { n: "南昌", t: "英雄故里，赣江流韵", d: "落霞孤鹜，你的热血在历史的江河里从未冷过。", c: "Root", p: "滕王阁序传千古，赣水秋光映彩霞。" },
+            { n: "沈阳", t: "盛京故里，硬核豪情", d: "红墙映照雪影，你那份直来直去的性格，最是坦荡。", c: "Snow", p: "盛京宫殿深秋色，硬核沈阳古韵长。" },
+            { n: "长春", t: "北国春城，静谧宽广", d: "森林与工业的交织，赋予了你稳健且长久的生命力。", c: "Snow", p: "净月潭清林似海，长春道阔气如虹。" },
+            { n: "太原", t: "锦绣并州，汾河长流", d: "三晋大地的坚韧，刻进了你守根护脉的骨子里。", c: "Root", p: "晋祠圣母千年梦，汾水长流并州魂。" },
+            { n: "贵阳", t: "黔中秘境，爽爽清凉", d: "山水秘境，给独立的你一处不被打扰的夏夜凉风。", c: "Nature", p: "甲秀楼前波漾影，黔山叠翠气清新。" },
+            { n: "石家庄", t: "燕赵侠义，平凡守候", d: "平凡中的伟大，你在平原之上守着家宅的安宁。", c: "Root", p: "赵州桥下流水急，正定城头古韵香。" },
+            { n: "兰州", t: "大漠河山，黄河壮歌", d: "一碗面，一条河，你在苍凉中品出了一份刚毅。", c: "Root", p: "中山桥下黄河滚，牛肉面里故乡情。" },
+            { n: "西宁", t: "夏都清凉，纯净之境", d: "高原的纯净，是你洗涤灵魂最神圣的祭坛。", c: "Mystery", p: "塔尔寺红墙映月，青海湖水洗尘心。" },
+            { n: "银川", t: "塞上江南，湖城静谧", d: "荒凉里的繁华，你是那座能在废墟里开出花的人。", c: "Root", p: "贺兰山下黄河绕，塞上江南锦绣开。" }
+        ];
+
+        let cur = 0; let scores = {};
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth * 100;
+            const y = e.clientY / window.innerHeight * 100;
+            document.getElementById('ink1').style.transform = `translate(${x/10}px, ${y/10}px)`;
+            document.getElementById('ink2').style.transform = `translate(${-x/10}px, ${-y/10}px)`;
+        });
+
+        function startTest() {
+            document.getElementById('view-start').classList.add('hidden');
+            document.getElementById('view-test').classList.remove('hidden');
+            renderQ();
+        }
+
+        function renderQ() {
+            const data = questions[cur];
+            document.getElementById('q-category').innerText = data.cat;
+            document.getElementById('q-text').innerText = data.q;
+            document.getElementById('progress-num').innerText = `${String(cur+1).padStart(2,'0')}/${questions.length}`;
+            document.getElementById('progress-bar').style.width = `${((cur+1)/questions.length)*100}%`;
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+            data.o.forEach((opt, idx) => {
+                const b = document.createElement('div');
+                b.className = "opt-card p-6 md:p-8 rounded-sm text-lg";
+                b.innerHTML = `<span class="text-red-900/30 mr-4 font-black">${String.fromCharCode(65+idx)}</span> ${opt.t}`;
+                b.onclick = () => {
+                    scores[opt.v] = (scores[opt.v] || 0) + 1;
+                    if(++cur < questions.length) renderQ(); else calc();
+                };
+                optDiv.appendChild(b);
+            });
+        }
+
+        function calc() {
+            const winner = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const pool = cityDB.filter(c => c.c === winner || (winner === 'Snow' && (c.n==='哈尔滨'||c.n==='沈阳'||c.n==='长春')));
+            const final = pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : cityDB[0];
+            document.getElementById('view-test').classList.add('hidden');
+            document.getElementById('view-result').classList.remove('hidden');
+            document.getElementById('r-city').innerText = final.n;
+            document.getElementById('r-tag').innerText = final.t;
+            document.getElementById('r-desc').innerText = final.d;
+            document.getElementById('r-poem').innerText = final.p;
+        }
+    </script>
+</body>
+</html>
