@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>金融多信源校验 RAG 平台</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root{
+    --bg:#0b1020; --panel:#121833; --border:#243059; --text:#e7ecff;
+    --muted:#8fa0d8; --accent:#6ea8ff; --ok:#2ecc71; --warn:#f1c40f; --err:#e74c3c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#0b1020,#0e1530);color:var(--text)}
+  header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;gap:18px;align-items:center;background:rgba(11,16,32,.85);backdrop-filter:blur(6px);position:sticky;top:0;z-index:10}
+  header h1{font-size:18px;margin:0;letter-spacing:.5px}
+  header .tag{padding:3px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted);font-size:12px}
+  header .spacer{flex:1}
+  header button, .btn{background:linear-gradient(180deg,#1d2a55,#16204a);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px}
+  header button:hover, .btn:hover{border-color:var(--accent)}
+  .container{max-width:1180px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:1fr 380px;gap:20px}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .panel h2{font-size:14px;margin:0 0 10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+  textarea, input[type=text]{width:100%;background:#0c1330;border:1px solid var(--border);color:var(--text);border-radius:10px;padding:12px;font-size:14px;outline:none;resize:vertical;font-family:inherit}
+  textarea:focus, input:focus{border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;margin:12px 0}
+  .row input{flex:1}
+  .btn.primary{background:linear-gradient(180deg,#3e6cff,#2b4cd1);border-color:#3e6cff}
+  .btn.primary:disabled{opacity:.6;cursor:not-allowed}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+  .stat{background:#0c1330;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:1px}
+  .stat .v{font-size:22px;font-weight:600;margin-top:4px}
+  .answer{white-space:pre-wrap;line-height:1.7;font-size:14px}
+  .source{background:#0c1330;border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+  .source .title{font-weight:600;margin-bottom:4px}
+  .source .meta{color:var(--muted);font-size:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .conf-high{color:var(--ok)}
+  .conf-medium{color:var(--warn)}
+  .conf-low{color:var(--err)}
+  .loader{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--accent);animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .log{max-height:240px;overflow:auto;background:#0c1330;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:"JetBrains Mono",Consolas,monospace;font-size:12px;color:var(--muted);line-height:1.6}
+  .empty{color:var(--muted);text-align:center;padding:40px 0}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;border:1px solid var(--border);color:var(--muted)}
+  .pill.high{color:var(--ok);border-color:rgba(46,204,113,.4);background:rgba(46,204,113,.1)}
+  .pill.medium{color:var(--warn);border-color:rgba(241,196,15,.4);background:rgba(241,196,15,.1)}
+  .pill.low{color:var(--err);border-color:rgba(231,76,60,.4);background:rgba(231,76,60,.1)}
+  @media (max-width: 900px){.container{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>金融多信源校验 RAG 平台</h1>
+  <span class="tag" id="tag-llm">LLM 未连接</span>
+  <span class="tag" id="tag-emb">嵌入：加载中</span>
+  <div class="spacer"></div>
+  <button id="btn-crawl">立即爬取 & 入库</button>
+  <button id="btn-refresh">刷新状态</button>
+</header>
+
+<div class="container">
+  <section>
+    <div class="panel">
+      <h2>投研问答</h2>
+      <div class="row">
+        <input id="q" type="text" placeholder="例：近一周油价为何下跌？主要信源有哪些？" />
+        <button class="btn primary" id="btn-ask">提问</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="k">总事实</div><div class="v" id="s-total">0</div></div>
+        <div class="stat"><div class="k">高置信</div><div class="v" id="s-high">0</div></div>
+        <div class="stat"><div class="k">中置信</div><div class="v" id="s-med">0</div></div>
+        <div class="stat"><div class="k">信源数</div><div class="v" id="s-sources">0</div></div>
+      </div>
+      <div class="answer" id="answer">
+        <div class="empty">等待提问…</div>
+      </div>
+    </div>
+  </section>
+
+  <aside>
+    <div class="panel" style="margin-bottom:16px">
+      <h2>爬取日志</h2>
+      <div class="log" id="log">—</div>
+    </div>
+
+    <div class="panel">
+      <h2>最近事实</h2>
+      <div id="fact-list"><div class="empty">暂无事实</div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const API = location.origin + "/api";
+
+async function get(path){ const r = await fetch(API+path); return r.json(); }
+async function post(path, body){ const r = await fetch(API+path,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body)}); return r.json(); }
+
+function log(msg){ const el = $("log"); const t = new Date().toLocaleTimeString(); el.textContent = t + "  " + msg + "\n" + el.textContent; }
+
+async function refresh(){
+  try{
+    const s = await get("/stats");
+    $("s-total").textContent = s.kb_stats.total;
+    $("s-high").textContent = s.kb_stats.trusted;
+    $("s-med").textContent = s.kb_stats.total - s.kb_stats.trusted;
+    $("s-sources").textContent = s.kb_stats.sources;
+    $("tag-llm").textContent = s.llm_ready ? "LLM 就绪" : "LLM 未连接";
+    $("tag-llm").style.color = s.llm_ready ? "var(--ok)" : "var(--muted)";
+    const h = await get("/health");
+    $("tag-emb").textContent = "嵌入：" + (h.embedding_backend || "—");
+    const list = await get("/facts?limit=30");
+    renderFacts(list.items);
+    log("状态已刷新");
+  }catch(e){ log("刷新失败："+e.message); }
+}
+
+function renderFacts(items){
+  const el = $("fact-list");
+  if(!items.length){ el.innerHTML = `<div class="empty">暂无事实</div>`; return; }
+  el.innerHTML = items.slice(0,15).map(f => {
+    const confCls = f.confidence === "high" ? "high" : (f.confidence === "medium" ? "medium" : "low");
+    return `<div class="source">
+      <div class="title">${f.canonical_title}</div>
+      <div class="meta">
+        <span class="pill ${confCls}">${f.confidence.toUpperCase()} · ${(f.score||0).toFixed(2)}</span>
+        <span class="pill">${(f.sources||[]).length} 信源</span>
+        <span>${(f.sources||[]).slice(0,3).join(", ")}</span>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+async function crawl(){
+  const btn = $("btn-crawl");
+  btn.disabled = true; btn.innerHTML = '<span class="loader"></span> 爬取中…';
+  try{
+    log("开始爬取 finurls …");
+    const r = await post("/crawl", { pages: 3, enrich_content: false });
+    log(`完成：入库 ${r.data.facts} 条事实，原始 ${r.data.raw_articles} 条`);
+    refresh();
+  }catch(e){ log("爬取失败："+e.message); }
+  finally{ btn.disabled = false; btn.textContent = "立即爬取 & 入库"; }
+}
+
+async function ask(){
+  const q = $("q").value.trim();
+  if(!q) return;
+  const btn = $("btn-ask");
+  btn.disabled = true; btn.textContent = "思考中…";
+  $("answer").innerHTML = '<div class="empty"><span class="loader"></span></div>';
+  try{
+    const r = await post("/qa", { question: q, top_k: 5 });
+    const srcHtml = r.sources.map(s => {
+      const cls = s.confidence === "high" ? "high" : (s.confidence === "medium" ? "medium" : "low");
+      return `<div class="source">
+        <div class="title">${s.canonical_title}</div>
+        <div class="meta">
+          <span class="pill ${cls}">${s.confidence.toUpperCase()} · ${(s.score||0).toFixed(2)}</span>
+          <span>${(s.sources||[]).join(", ")}</span>
+          <span>· fact_id: ${s.fact_id}</span>
+        </div>
+      </div>`;
+    }).join("");
+    $("answer").innerHTML = `
+      <div style="margin-bottom:14px">
+        <div style="color:var(--muted);font-size:12px;margin-bottom:6px">回答 · 置信度 <span class="pill ${r.confidence}">${r.confidence.toUpperCase()}</span> · ${r.elapsed_ms}ms</div>
+        <div class="answer">${r.answer}</div>
+      </div>
+      <h2 style="font-size:13px;color:var(--muted);margin:10px 0 6px">引用信源 (${r.sources.length})</h2>
+      ${srcHtml || '<div class="empty">无</div>'}
+    `;
+    log(`回答：${q.slice(0,40)}… · ${r.elapsed_ms}ms`);
+  }catch(e){ $("answer").innerHTML = `<div class="empty">失败：${e.message}</div>`; }
+  finally{ btn.disabled = false; btn.textContent = "提问"; }
+}
+
+$("btn-crawl").addEventListener("click", crawl);
+$("btn-ask").addEventListener("click", ask);
+$("btn-refresh").addEventListener("click", refresh);
+$("q").addEventListener("keydown", e => { if(e.key === "Enter") ask(); });
+
+refresh();
+</script>
+</body>
+</html>
