@@ -1,0 +1,355 @@
+[
+  {
+    "id": "h01",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C1",
+        "label": "参数编造",
+        "severity": "HIGH",
+        "reason": "回复中的参数事实 '我们全品类支持30天无理由退货' 在知识库中找不到对应，疑似篡改或编造。",
+        "evidence": "我们全品类支持30天无理由退货"
+      }
+    ],
+    "summary": "[参数编造·HIGH] 回复中的参数事实 '我们全品类支持30天无理由退货' 在知识库中找不到对应，疑似篡改或编造。"
+  },
+  {
+    "id": "h02",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C1",
+        "label": "参数编造",
+        "severity": "HIGH",
+        "reason": "回复中的参数值 '5.3' 与知识库参数值 '5.0' 直接矛盾。",
+        "evidence": "5.3 vs 5.0"
+      }
+    ],
+    "summary": "[参数编造·HIGH] 回复中的参数值 '5.3' 与知识库参数值 '5.0' 直接矛盾。"
+  },
+  {
+    "id": "h03",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C4",
+        "label": "能力越界",
+        "severity": "HIGH",
+        "reason": "系统知识库标注相关能力未接入/不具备，但回复声称已完成该操作。",
+        "evidence": "帮您查了"
+      }
+    ],
+    "summary": "[能力越界·HIGH] 系统知识库标注相关能力未接入/不具备，但回复声称已完成该操作。"
+  },
+  {
+    "id": "h04",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.85,
+    "categories": [
+      {
+        "code": "C3",
+        "label": "政策偏差",
+        "severity": "MEDIUM",
+        "reason": "回复指引用户在订单备注填写发票信息，但知识库规定应在订单详情页申请。",
+        "evidence": "备注 vs 订单详情页"
+      }
+    ],
+    "summary": "[政策偏差·MEDIUM] 回复指引用户在订单备注填写发票信息，但知识库规定应在订单详情页申请。"
+  },
+  {
+    "id": "h05",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.75,
+    "categories": [
+      {
+        "code": "C7",
+        "label": "信息遗漏",
+        "severity": "LOW",
+        "reason": "回复未覆盖知识库关键事实 '当前优惠活动：满200减20、满500减60'，遗漏了重要信息。",
+        "evidence": "当前优惠活动：满200减20、满500减60"
+      }
+    ],
+    "summary": "[信息遗漏·LOW] 回复未覆盖知识库关键事实 '当前优惠活动：满200减20、满500减60'，遗漏了重要信息。"
+  },
+  {
+    "id": "h06",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.99,
+    "categories": [
+      {
+        "code": "C1",
+        "label": "参数编造",
+        "severity": "HIGH",
+        "reason": "回复中的参数值 '头层牛皮' 与知识库参数值 'PU合成革' 直接矛盾。",
+        "evidence": "头层牛皮 vs PU合成革"
+      },
+      {
+        "code": "C7",
+        "label": "信息遗漏",
+        "severity": "LOW",
+        "reason": "回复未覆盖知识库关键事实 '保修期：6个月'，遗漏了重要信息。",
+        "evidence": "保修期：6个月"
+      }
+    ],
+    "summary": "[参数编造·HIGH] 回复中的参数值 '头层牛皮' 与知识库参数值 'PU合成革' 直接矛盾。；[信息遗漏·LOW] 回复未覆盖知识库关键事实 '保修期：6个月'，遗漏了重要信息。"
+  },
+  {
+    "id": "h07",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C5",
+        "label": "信息编造",
+        "severity": "HIGH",
+        "reason": "回复给出了具体门牌地址，但知识库明确规定此类信息需系统以短信方式发送、不可口头告知。",
+        "evidence": "具体门牌地址"
+      }
+    ],
+    "summary": "[信息编造·HIGH] 回复给出了具体门牌地址，但知识库明确规定此类信息需系统以短信方式发送、不可口头告知。"
+  },
+  {
+    "id": "h08",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.99,
+    "categories": [
+      {
+        "code": "C1",
+        "label": "参数编造",
+        "severity": "HIGH",
+        "reason": "回复中的参数事实 '下单后48小时内发货' 在知识库中找不到对应，疑似篡改或编造。",
+        "evidence": "下单后48小时内发货"
+      },
+      {
+        "code": "C3",
+        "label": "政策偏差",
+        "severity": "MEDIUM",
+        "reason": "回复中发货时间 48 小时与知识库 24 小时不一致。",
+        "evidence": "48小时 vs 24小时"
+      },
+      {
+        "code": "C3",
+        "label": "政策偏差",
+        "severity": "MEDIUM",
+        "reason": "回复指定'顺丰'快递，但知识库列示的快递为 ['中通', '韵达', '圆通']。",
+        "evidence": "顺丰"
+      },
+      {
+        "code": "C3",
+        "label": "政策偏差",
+        "severity": "MEDIUM",
+        "reason": "回复到货时间 3 天与知识库 5 天差距较大。",
+        "evidence": "3天 vs 5天"
+      },
+      {
+        "code": "C7",
+        "label": "信息遗漏",
+        "severity": "LOW",
+        "reason": "回复未覆盖知识库关键事实 '发货时间：下单后24小时内发货（预售商品除外）'，遗漏了重要信息。",
+        "evidence": "发货时间：下单后24小时内发货（预售商品除外）"
+      }
+    ],
+    "summary": "[参数编造·HIGH] 回复中的参数事实 '下单后48小时内发货' 在知识库中找不到对应，疑似篡改或编造。；[政策偏差·MEDIUM] 回复中发货时间 48 小时与知识库 24 小时不一致。；[政策偏差·MEDIUM] 回复指定'顺丰'快递，但知识库列示的快递为 ['中通', '韵达', '圆通']。；[政策偏差·MEDIUM] 回复到货时间 3 天与知识库 5 天差距较大。；[信息遗漏·LOW] 回复未覆盖知识库关键事实 '发货时间：下单后24小时内发货（预售商品除外）'，遗漏了重要信息。"
+  },
+  {
+    "id": "h09",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C1",
+        "label": "参数编造",
+        "severity": "HIGH",
+        "reason": "回复断言 'NFC'，但知识库含否定提示，疑似编造。",
+        "evidence": "NFC"
+      }
+    ],
+    "summary": "[参数编造·HIGH] 回复断言 'NFC'，但知识库含否定提示，疑似编造。"
+  },
+  {
+    "id": "h10",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C4",
+        "label": "能力越界",
+        "severity": "HIGH",
+        "reason": "系统知识库标注相关能力未接入/不具备，但回复声称已完成该操作。",
+        "evidence": "帮您查了"
+      }
+    ],
+    "summary": "[能力越界·HIGH] 系统知识库标注相关能力未接入/不具备，但回复声称已完成该操作。"
+  },
+  {
+    "id": "h11",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C2",
+        "label": "政策编造",
+        "severity": "HIGH",
+        "reason": "回复提及线下门店，但知识库明确品牌为纯线上电商。",
+        "evidence": "线下门店"
+      }
+    ],
+    "summary": "[政策编造·HIGH] 回复提及线下门店，但知识库明确品牌为纯线上电商。"
+  },
+  {
+    "id": "h12",
+    "is_hallucination": false,
+    "verdict": "OK",
+    "confidence": 0.85,
+    "categories": [],
+    "summary": "回复与知识库一致，未检出明显幻觉。"
+  },
+  {
+    "id": "h13",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.99,
+    "categories": [
+      {
+        "code": "C6",
+        "label": "安全误导",
+        "severity": "CRITICAL",
+        "reason": "回复给出安全肯定结论 (['放心使用', '可以放心'])，但知识库包含安全警示 (['视黄醇', '注意事项', '咨询医生', '建议咨询', '孕妇'])。",
+        "evidence": "安全词=['孕妇'], 回复=['放心使用', '可以放心'], KB警示=['视黄醇', '注意事项', '咨询医生', '建议咨询', '孕妇']"
+      },
+      {
+        "code": "C7",
+        "label": "信息遗漏",
+        "severity": "LOW",
+        "reason": "回复未覆盖知识库关键事实 '成分：水、甘油、烟酰胺(2%)、视黄醇棕榈酸酯、透明质酸钠'，遗漏了重要信息。",
+        "evidence": "成分：水、甘油、烟酰胺(2%)、视黄醇棕榈酸酯、透明质酸钠"
+      }
+    ],
+    "summary": "[安全误导·CRITICAL] 回复给出安全肯定结论 (['放心使用', '可以放心'])，但知识库包含安全警示 (['视黄醇', '注意事项', '咨询医生', '建议咨询', '孕妇'])。；[信息遗漏·LOW] 回复未覆盖知识库关键事实 '成分：水、甘油、烟酰胺(2%)、视黄醇棕榈酸酯、透明质酸钠'，遗漏了重要信息。"
+  },
+  {
+    "id": "h14",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C4",
+        "label": "能力越界",
+        "severity": "HIGH",
+        "reason": "系统知识库标注相关能力未接入/不具备，但回复声称已完成该操作。",
+        "evidence": "已帮您修改"
+      }
+    ],
+    "summary": "[能力越界·HIGH] 系统知识库标注相关能力未接入/不具备，但回复声称已完成该操作。"
+  },
+  {
+    "id": "h15",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C5",
+        "label": "信息编造",
+        "severity": "HIGH",
+        "reason": "回复提及品牌关联关系 (['旗下', '子品牌', '共享'])，但知识库未提及该信息。",
+        "evidence": "品牌关联"
+      }
+    ],
+    "summary": "[信息编造·HIGH] 回复提及品牌关联关系 (['旗下', '子品牌', '共享'])，但知识库未提及该信息。"
+  },
+  {
+    "id": "h16",
+    "is_hallucination": false,
+    "verdict": "OK",
+    "confidence": 0.85,
+    "categories": [],
+    "summary": "回复与知识库一致，未检出明显幻觉。"
+  },
+  {
+    "id": "h17",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C1",
+        "label": "参数编造",
+        "severity": "HIGH",
+        "reason": "回复中的参数值 'Type-C' 与知识库参数值 'USB-A' 直接矛盾。",
+        "evidence": "Type-C vs USB-A"
+      }
+    ],
+    "summary": "[参数编造·HIGH] 回复中的参数值 'Type-C' 与知识库参数值 'USB-A' 直接矛盾。"
+  },
+  {
+    "id": "h18",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.99,
+    "categories": [
+      {
+        "code": "C4",
+        "label": "能力越界",
+        "severity": "HIGH",
+        "reason": "系统知识库标注相关能力未接入/不具备，但回复声称已完成该操作。",
+        "evidence": "2小时内"
+      },
+      {
+        "code": "C1",
+        "label": "参数编造",
+        "severity": "HIGH",
+        "reason": "回复中的参数事实 '会有专属客服在2小时内联系您处理' 在知识库中找不到对应，疑似篡改或编造。",
+        "evidence": "会有专属客服在2小时内联系您处理"
+      }
+    ],
+    "summary": "[能力越界·HIGH] 系统知识库标注相关能力未接入/不具备，但回复声称已完成该操作。；[参数编造·HIGH] 回复中的参数事实 '会有专属客服在2小时内联系您处理' 在知识库中找不到对应，疑似篡改或编造。"
+  },
+  {
+    "id": "h19",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.95,
+    "categories": [
+      {
+        "code": "C2",
+        "label": "政策编造",
+        "severity": "HIGH",
+        "reason": "回复提及学生优惠，但知识库明确说明无学生优惠政策。",
+        "evidence": "学生优惠"
+      }
+    ],
+    "summary": "[政策编造·HIGH] 回复提及学生优惠，但知识库明确说明无学生优惠政策。"
+  },
+  {
+    "id": "h20",
+    "is_hallucination": true,
+    "verdict": "HALLUCINATION",
+    "confidence": 0.75,
+    "categories": [
+      {
+        "code": "C7",
+        "label": "信息遗漏",
+        "severity": "LOW",
+        "reason": "回复未覆盖知识库关键事实 '用户评价汇总：约30%的用户反馈偏大半码，建议脚瘦的用户选小半码'，遗漏了重要信息。",
+        "evidence": "用户评价汇总：约30%的用户反馈偏大半码，建议脚瘦的用户选小半码"
+      }
+    ],
+    "summary": "[信息遗漏·LOW] 回复未覆盖知识库关键事实 '用户评价汇总：约30%的用户反馈偏大半码，建议脚瘦的用户选小半码'，遗漏了重要信息。"
+  }
+]
