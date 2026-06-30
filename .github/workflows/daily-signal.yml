@@ -2,7 +2,6 @@ name: Daily Finance Signal
 
 on:
   schedule:
-    # 每天北京时间9点执行
     - cron: '0 1 * * *'
   workflow_dispatch:
 
@@ -11,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     
     - name: 设置 Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.11'
     
@@ -33,9 +32,9 @@ jobs:
     
     - name: 保存日志
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: signal-log-${{ github.run_id }}
         path: |
           data/
-          *.log
+          logs/
